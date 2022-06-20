@@ -1,7 +1,11 @@
+using AutoMapper;
 using JwtApp.API.Core.Application.Interfaces;
+using JwtApp.API.Core.Application.Mapping;
 using JwtApp.API.Persistance.Context;
 using JwtApp.API.Persistance.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +21,15 @@ builder.Services.AddDbContext<JwtContext>(opt =>
 });
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+
+builder.Services.AddAutoMapper(opt =>
+{
+    opt.AddProfiles(new List<Profile>()
+    {
+        new ProductProfile()
+    });
+});
 
 var app = builder.Build();
 
