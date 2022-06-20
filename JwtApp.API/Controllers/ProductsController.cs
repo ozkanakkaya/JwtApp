@@ -1,4 +1,5 @@
-﻿using JwtApp.API.Core.Application.Features.CQRS.Queries;
+﻿using JwtApp.API.Core.Application.Features.CQRS.Commands;
+using JwtApp.API.Core.Application.Features.CQRS.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,18 @@ namespace JwtApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _mediator.Send(new GetProductQueryRequest(id));
             return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _mediator.Send(new DeleteProductCommandRequest(id));
+            return NoContent();
         }
     }
 }
