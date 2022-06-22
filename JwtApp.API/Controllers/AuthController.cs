@@ -1,4 +1,5 @@
 ﻿using JwtApp.API.Core.Application.Features.CQRS.Commands;
+using JwtApp.API.Core.Application.Features.CQRS.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,17 @@ namespace JwtApp.API.Controllers
         {
             await _mediator.Send(request);
             return Created("", request);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SignIn(CheckUserQueryRequest request)
+        {
+            var userDto = await _mediator.Send(request);
+            if (userDto.IsExist)
+            {
+                return Created("", 123);
+            }
+            return BadRequest("Username veya parola hatalıdır.");
         }
     }
 }
