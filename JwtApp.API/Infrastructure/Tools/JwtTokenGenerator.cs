@@ -21,10 +21,13 @@ namespace JwtApp.API.Infrastructure.Tools
             claims.Add(new Claim(ClaimTypes.Name, dto.Username));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, dto.Id.ToString()));
 
-            JwtSecurityToken token = new JwtSecurityToken(issuer: JwtTokenSettings.Issuer, audience: JwtTokenSettings.Audience, claims: claims, notBefore: DateTime.Now, expires: DateTime.Now.AddDays(JwtTokenSettings.Expire), signingCredentials: credentials);
+            var expireDate = DateTime.UtcNow.AddMinutes(JwtTokenSettings.Expire);
+
+            JwtSecurityToken token = new JwtSecurityToken(issuer: JwtTokenSettings.Issuer, audience: JwtTokenSettings.Audience, claims: claims, notBefore: DateTime.UtcNow, expires: expireDate, signingCredentials: credentials);
+
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
-            return new JwtTokenResponse(handler.WriteToken(token));
+            return new JwtTokenResponse(handler.WriteToken(token), expireDate);
         }
     }
 }
