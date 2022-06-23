@@ -41,5 +41,17 @@ namespace JwtApp.Front.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        public async Task<IActionResult> Remove(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var token = User.Claims.SingleOrDefault(x => x.Type == "accessToken")?.Value;
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            await client.DeleteAsync($"http://localhost:5203/api/Categories/{id}");
+
+            return RedirectToAction("List");
+
+        }
     }
 }
