@@ -1,9 +1,10 @@
-﻿@model List<JwtApp.Front.Model.CategoryListResponseModel>
+﻿@model List<CategoryListResponseModel>
 @{
     Layout = "_Layout";
 }
 
 <div class="container my-4 pt-4">
+    <a asp-action="Create"  asp-controller="Category">Kategori Ekle</a>
     <table class="table">
         <thead>
             <tr>

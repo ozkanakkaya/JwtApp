@@ -1,4 +1,4 @@
-﻿namespace JwtApp.Front.Model
+﻿namespace JwtApp.Front.Models
 {
     public class UserLoginModel
     {

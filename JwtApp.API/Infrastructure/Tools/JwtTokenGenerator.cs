@@ -21,7 +21,7 @@ namespace JwtApp.API.Infrastructure.Tools
             claims.Add(new Claim(ClaimTypes.Name, dto.Username));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, dto.Id.ToString()));
 
-            var expireDate = DateTime.UtcNow.AddMinutes(JwtTokenSettings.Expire);
+            var expireDate = DateTime.UtcNow.AddDays(JwtTokenSettings.Expire);
 
             JwtSecurityToken token = new JwtSecurityToken(issuer: JwtTokenSettings.Issuer, audience: JwtTokenSettings.Audience, claims: claims, notBefore: DateTime.UtcNow, expires: expireDate, signingCredentials: credentials);
 

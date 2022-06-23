@@ -1,4 +1,4 @@
-﻿using JwtApp.Front.Model;
+﻿using JwtApp.Front.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
