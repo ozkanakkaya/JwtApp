@@ -1,6 +1,7 @@
 ﻿using JwtApp.Front.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using System.Text.Json;
 
 namespace JwtApp.Front.Controllers
@@ -64,10 +65,52 @@ namespace JwtApp.Front.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CategoryCreateRequestModel model)
+        public async Task<IActionResult> Create(CategoryCreateRequestModel model)
         {
             if (ModelState.IsValid)
             {
+                var client = this.CreateClient();
+
+                var requestContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                await client.PostAsync("http://localhost:5203/api/Categories", requestContent);
+
+                return RedirectToAction("List");
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Update(int id)
+        {
+            var client = this.CreateClient();
+
+            var response = await client.GetAsync($"http://localhost:5203/api/Categories/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var category = JsonSerializer.Deserialize<CategoryUpdateRequestModel>(jsonString, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                });
+
+                return View(category);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CategoryUpdateRequestModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var client = this.CreateClient();
+
+                var requestContent = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync("http://localhost:5203/api/Categories", requestContent);
+
                 return RedirectToAction("List");
             }
             return View(model);
